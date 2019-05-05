@@ -1,0 +1,21 @@
+
+.thumbnail {
+  position: relative;
+  margin-bottom: 30px;
+  border: thin silver solid;
+
+  padding: 0.5em;
+}
+
+.thumbnail img {
+  max-height: 150px;
+}
+
+.thumbnail .description {
+  color: #7f7f7f;
+}
+
+.price {
+  font-weight: bold;
+  font-size: 16px;
+}
