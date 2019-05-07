@@ -5,13 +5,23 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressHbs=require('express-handlebars');
 var mongoose=require('mongoose');
+
+var nodemailer = require('nodemailer');
+
 var userRoute=require('./routes/user');
 var indexRouter = require('./routes/index');
 var session=require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var passport=require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
  var flash=require('connect-flash');
  var expressValidator=require('express-validator');
+ 
+ var bcrypt = require('bcrypt-nodejs');
+
+var async = require('async');
+var crypto = require('crypto');
 var app = express();
 
 mongoose.connect('mongodb://localhost/shop', {useNewUrlParser: true});

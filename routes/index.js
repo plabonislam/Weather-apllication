@@ -1,11 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var passport=require('passport');
-var csrf = require('csurf');//import csurf in csrf variable
-var Product=require('../models/product');
 
-var csrfProtection=csrf();//csurfProtection variable using csurf pacakage
-router.use(csrfProtection);//all routes uses this csurf protection
+var Product=require('../models/product');
+var User = require("../models/user");
+
+
+
+//all routes uses this csurf protection
 /* GET home page. */
 router.get('/', function(req, res, next) {
   //want to grab seed data from data base...as asynchronise data retriving
@@ -21,6 +23,8 @@ router.get('/', function(req, res, next) {
   });
   
 });
+
+
 
 
 
