@@ -9,6 +9,8 @@ var async = require("async");
 var nodemailer = require("nodemailer");
 var crypto = require("crypto");
 
+
+
 var csrfProtection=csrf();//csurfProtection variable using csurf pacakage
 router.use(csrfProtection);//all routes uses this csurf protection
 
@@ -68,6 +70,7 @@ router.post('/forgot', function(req, res, next) {
         console.log('mail sent');
         req.flash('message', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
         done(err, 'done');
+        
       });
     }
   ], function(err) {
