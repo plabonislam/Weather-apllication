@@ -4,10 +4,10 @@ var mongoose=require('mongoose');
 //passing js object through itwhich describe the schema
 var schema=new mongoose.Schema({
 
-imagePath:{type:String,required:true},
-title:{type:String,required:true},
-description:{type:String,required:true},
-price:{type:String,required:true}
+imagePath:{type:String},
+title:{type:String},
+description:{type:String},
+price:{type:String}
 
 });
 

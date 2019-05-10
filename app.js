@@ -24,6 +24,10 @@ var async = require('async');
 var crypto = require('crypto');
 var app = express();
 
+
+
+
+
 mongoose.connect('mongodb://localhost/shop', {useNewUrlParser: true});
 require('./config/passport');
 // view engine setup

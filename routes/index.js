@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport=require('passport');
-
+var up=require('../config/imageup');
 var Product=require('../models/product');
 var User = require("../models/user");
 
@@ -9,7 +9,8 @@ var async = require("async");
 var nodemailer = require("nodemailer");
 var crypto = require("crypto");
 
-
+var multer=require('multer');
+const path=require('path');
 //all routes uses this csurf protection
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -88,6 +89,85 @@ router.post('/reset/:token', function(req, res) {
   ], function(err) {
     res.redirect('/');
   });
+});
+
+
+
+
+router.get('/imageup',function(req,res){
+   var succ=req.flash('message')[0];
+  res.render('upimage/impath',{success:succ,nosuccess:!succ});
+
+});
+
+
+router.post('/upload',function(req,res){
+
+        
+
+
+//set up storage 
+var storage = multer.diskStorage({
+  destination: './public/images',
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+//calliing storage method and limit file and its type
+var upload = multer({ 
+  storage: storage,
+  limits:{ fileSize:1000000},//check size
+  fileFilter:function(req,file,cb){
+    check(file,cb);
+  }
+}).single('avatar');
+
+
+//checking exten
+function check(file,cb)
+{
+  //allow ext
+  const filetypes=/jpeg|jpg|png|gif/;
+  //check est 
+  const extname=filetypes.test(path.extname(file.originalname).toLowerCase());
+  //check mime
+  const mimetype=filetypes.test(file.mimetype);
+  if(extname && mimetype)
+  {
+    return cb(null,true);
+  }
+  else
+  {
+    return cb('err','typ not matched');
+  }
+}
+
+ //checks 
+ upload(req, res, function (err) {
+ if(err)
+ {
+  req.flash('message', err);
+  res.redirect('/imageup');
+ }
+ else{
+  console.log(req.file.filename);
+
+  var item={
+    imagePath:req.file.filename,
+    title:req.body.title,
+    description:req.body.description,
+    price: req.body.price
+
+  }
+  var product = new Product(item);
+  product.save();
+  res.redirect('/');
+}
+ 
+});
+
+
 });
 
  module.exports = router;
