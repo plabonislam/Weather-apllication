@@ -69,19 +69,33 @@ app.post('/weather',function(req,res,next){
   var kk=req.body.city;
   var url = `http://api.openweathermap.org/data/2.5/weather?q=${kk}&units=imperial&appid=c86be64eedc45c801cde1f3b0dbf76d7`;
  request(url,function(err,response,body){
- var weather_json =  JSON.parse(body);
-console.log(weather_json);
+var weather_json =  JSON.parse(body);
  
-var weather ={
-   city: req.body.city,
-  description:weather_json.weather[0].description,
-  icon: weather_json.weather[0].icon,
-  tempareture:weather_json.main.temp
+if(weather_json.cod==200)
+{
+  console.log(weather_json.cod);
+var cel= (((weather_json.main.temp-32)*5)/9);
+cel= cel.toFixed(2);
+console.log(cel);
+  var weather ={
+    city: req.body.city,
+   description:weather_json.weather[0].description,
+   icon: weather_json.weather[0].icon,
+   tempareture:weather_json.main.temp,
+   cel:cel
+ }
+ 
+ res.render('weather/show',{ weather:weather,mmm:'ppp'});
+ 
 
 }
 
-res.render('weather/show',{ weather:weather,mmm:'ppp'});
- });
+else{
+  res.redirect('/');
+}
+});
+
+ 
 });
 
 app.use('/logout', function(req,res,next){
