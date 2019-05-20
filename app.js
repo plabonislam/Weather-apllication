@@ -22,13 +22,17 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var async = require('async');
 var crypto = require('crypto');
+
+
+
+var request= require('request');
 var app = express();
 
 
 
 
 
-mongoose.connect('mongodb://localhost/shop', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost/weather', {useNewUrlParser: true});
 require('./config/passport');
 // view engine setup
 app.engine('.hbs',expressHbs({ defaultLayout:'layout',extname:'.hbs'}));
@@ -50,10 +54,34 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 app.use(function(req, res, next) {
   res.locals.variable=req.isAuthenticated();
   res.locals.session=req.session;
   next();
+});
+
+
+
+
+
+app.post('/weather',function(req,res,next){
+  var kk=req.body.city;
+  var url = `http://api.openweathermap.org/data/2.5/weather?q=${kk}&units=imperial&appid=c86be64eedc45c801cde1f3b0dbf76d7`;
+ request(url,function(err,response,body){
+ var weather_json =  JSON.parse(body);
+console.log(weather_json);
+ 
+var weather ={
+   city: req.body.city,
+  description:weather_json.weather[0].description,
+  icon: weather_json.weather[0].icon,
+  tempareture:weather_json.main.temp
+
+}
+
+res.render('weather/show',{ weather:weather,mmm:'ppp'});
+ });
 });
 
 app.use('/logout', function(req,res,next){

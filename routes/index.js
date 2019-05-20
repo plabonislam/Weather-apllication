@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport=require('passport');
-var up=require('../config/imageup');
+
 var Product=require('../models/product');
 var User = require("../models/user");
 
@@ -11,22 +11,12 @@ var crypto = require("crypto");
 
 var multer=require('multer');
 const path=require('path');
+
+
 //all routes uses this csurf protection
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  //want to grab seed data from data base...as asynchronise data retriving
-
-  Product.find(function(err,docs)
-  {
-    var chunk=[];
-    var chunksize=3;
-    var succ=req.flash('message')[0];
-    for(var i=0;i<docs.length;i+=chunksize)
-    {
-      chunk.push(docs.slice(i,i+chunksize));
-    }
-    res.render('shop/index', { title: 'Shopping Cart',products: chunk, success:succ,nosuccess:!succ});
-  });
+  res.render('weather/index');
   
 });
 
