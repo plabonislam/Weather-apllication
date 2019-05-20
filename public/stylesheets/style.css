@@ -27,7 +27,8 @@
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 280px;
+  height: 230px;
+  margin-top: 100px;
   background: 
   /* color overlay */ 
     linear-gradient(
@@ -41,7 +42,7 @@
 
 .container {
   width: auto;
-  max-width: 680px;
+  max-width: 780px;
   padding: 0 15px;
 }
 .container .text-muted {
