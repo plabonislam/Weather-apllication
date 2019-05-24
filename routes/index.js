@@ -15,7 +15,7 @@ const path=require('path');
 
 //all routes uses this csurf protection
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/bd', function(req, res, next) {
   res.render('weather/index');
   
 });

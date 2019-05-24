@@ -1,0 +1,14 @@
+<div class="row">
+<div class="col-md-8 col-md-offset-1">
+
+{{#each weather_data}}
+<div class="panel panel-default ">
+    
+    <div class="panel-body ">
+        <p  class="float-md-left"> <img src="http://openweathermap.org/img/w/{{this.icon }}.png" alt="Image">  {{this.city}}  weather  <strong>{{ this.description}}</strong>  ||   Temperature <strong>{{ this.tempareture}}F /{{ this.cel }}C </strong> </p>
+         </div>
+
+  </div>
+{{/each}}
+</div>
+</div>

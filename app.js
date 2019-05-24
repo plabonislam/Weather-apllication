@@ -22,10 +22,7 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var async = require('async');
 var crypto = require('crypto');
-
-
-
-var request= require('request');
+var request= require('request-promise');
 var app = express();
 
 
@@ -63,7 +60,16 @@ app.use(function(req, res, next) {
 
 
 
+var citySchema = new mongoose.Schema({
+    name : String 
+});
 
+var cityModel = mongoose.model('City', citySchema);
+
+
+/*var barisal = new cityModel({name : 'Barisal'});
+
+barisal.save();*/
 
 app.post('/weather',function(req,res,next){
   var kk=req.body.city;
@@ -97,6 +103,53 @@ else{
 
  
 });
+
+
+async function getWeather(cities) {
+    var weather_data = [];
+
+    for (var city_obj of cities) {
+        var city = city_obj.name;
+        var url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=271d1234d3f497eed5b1d80a07b3fcd1`;
+
+        var response_body = await request(url);
+
+        var weather_json = JSON.parse(response_body);
+        var cel= (((weather_json.main.temp-32)*5)/9);
+cel= cel.toFixed(2);
+
+        var weather = {
+            city : city,
+            
+            description : weather_json.weather[0].description,
+            icon : weather_json.weather[0].icon,
+            tempareture:weather_json.main.temp,
+   cel:cel
+        };
+
+        weather_data.push(weather);
+    }
+
+    return weather_data;
+}
+
+
+app.get('/', function(req, res) {
+
+    cityModel.find({}, function(err, cities) {
+
+        getWeather(cities).then(function(results) {
+
+            var weather_data = {weather_data : results};
+
+            res.render('weather/bdshow', weather_data);
+
+        });
+
+    });      
+
+});
+
 
 app.use('/logout', function(req,res,next){
   req.logout();
